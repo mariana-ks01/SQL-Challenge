@@ -71,7 +71,8 @@ INNER JOIN countrylanguage cl ON cl.CountryCode = co.`Code`
 WHERE cl.`Language` = 'German' AND cl.Percentage > 50;
 
 -- Which country has the worst life expectancy? Discard zero or null values.
-SELECT MIN(LifeExpectancy) FROM country WHERE LifeExpectancy IS NOT NULL !=0;
+SELECT `Name` FROM country WHERE LifeExpectancy =
+(SELECT MIN(LifeExpectancy) FROM country WHERE LifeExpectancy IS NOT NULL AND LifeExpectancy !=0);
 
 -- List the top three most common government forms.
 SELECT GovernmentForm, COUNT(GovernmentForm) AS `Count` FROM country
