@@ -49,7 +49,7 @@ FROM rental r
 INNER JOIN inventory i ON i.inventory_id = r.inventory_id
 INNER JOIN film f ON f.film_id = i.film_id;
 
-SELECT DATE_ADD(rental_date, INTERVAL 6 DAY) FROM rented_movies WHERE title = 'ACADEMY DINOSAUR' AND return_date IS NULL;
+SELECT DATE_ADD(rental_date, INTERVAL rental_duration DAY) FROM rented_movies WHERE title = 'ACADEMY DINOSAUR' AND return_date IS NULL;
 
 -- What is the average runtime of all films?
 SELECT AVG(length) FROM film;
