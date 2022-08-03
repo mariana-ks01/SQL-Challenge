@@ -26,7 +26,8 @@ SELECT * FROM film_list WHERE rating != 'R';
 SELECT * FROM film_list ORDER BY `length` ASC LIMIT 10;
 
 -- Find the movies with the longest runtime, without using LIMIT .
-SELECT * FROM film_list ORDER BY `length` DESC;
+SELECT title FROM film WHERE `length` =
+(SELECT MAX(`length`) FROM film);
 
 -- Find all movies that have deleted scenes.
 SELECT * FROM film WHERE special_features LIKE '%Deleted Scenes%';
@@ -43,12 +44,12 @@ SELECT `actor_id`, COUNT(`actor_id`) FROM film_actor GROUP BY `actor_id` ORDER B
 SELECT first_name, last_name FROM actor WHERE actor_id = 107;
 
 -- 'Academy Dinosaur' has been rented out, when is it due to be returned?
-CREATE VIEW rented_movies AS SELECT f.title, r.rental_date, r.return_date
+CREATE VIEW rented_movies AS SELECT f.title, r.rental_date, r.return_date, f.rental_duration
 FROM rental r
 INNER JOIN inventory i ON i.inventory_id = r.inventory_id
 INNER JOIN film f ON f.film_id = i.film_id;
 
-SELECT title, return_date FROM rented_movies WHERE title = 'Academy dinosaur' ORDER BY return_date DESC LIMIT 1;
+SELECT DATE_ADD(rental_date, INTERVAL 6 DAY) FROM rented_movies WHERE title = 'ACADEMY DINOSAUR' AND return_date IS NULL;
 
 -- What is the average runtime of all films?
 SELECT AVG(length) FROM film;
