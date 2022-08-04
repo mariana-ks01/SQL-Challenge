@@ -44,12 +44,11 @@ SELECT `actor_id`, COUNT(`actor_id`) FROM film_actor GROUP BY `actor_id` ORDER B
 SELECT first_name, last_name FROM actor WHERE actor_id = 107;
 
 -- 'Academy Dinosaur' has been rented out, when is it due to be returned?
-CREATE VIEW rented_movies AS SELECT f.title, r.rental_date, r.return_date, f.rental_duration
+SELECT f.title, DATE_ADD(r.rental_date, INTERVAL f.rental_duration DAY) AS return_date
 FROM rental r
 INNER JOIN inventory i ON i.inventory_id = r.inventory_id
-INNER JOIN film f ON f.film_id = i.film_id;
-
-SELECT DATE_ADD(rental_date, INTERVAL rental_duration DAY) FROM rented_movies WHERE title = 'ACADEMY DINOSAUR' AND return_date IS NULL;
+INNER JOIN film f ON f.film_id = i.film_id
+WHERE title = 'ACADEMY DINOSAUR' AND return_date IS NULL;
 
 -- What is the average runtime of all films?
 SELECT AVG(length) FROM film;
